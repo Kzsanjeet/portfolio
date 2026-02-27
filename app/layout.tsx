@@ -1,36 +1,46 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
+import type React from "react";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "react-hot-toast";
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Balbir Singh Thapa - Full-Stack MERN Developer",
-  description: "Portfolio of Balbir Singh Thapa, a passionate Full-Stack MERN Developer and Backend Specialist",
-  keywords: "MERN, Full-Stack Developer, React, Node.js, MongoDB, Express.js, Portfolio",
+  description:
+    "Portfolio of Balbir Singh Thapa, a passionate Full-Stack MERN Developer and Backend Specialist",
+  keywords:
+    "MERN, Full-Stack Developer, React, Node.js, MongoDB, Express.js, Portfolio",
   authors: [{ name: "Balbir Singh Thapa" }],
   openGraph: {
     title: "Balbir Singh Thapa - Full-Stack MERN Developer",
-    description: "Portfolio of Balbir Singh Thapa, a passionate Full-Stack MERN Developer and Backend Specialist",
+    description:
+      "Portfolio of Balbir Singh Thapa, a passionate Full-Stack MERN Developer and Backend Specialist",
     type: "website",
   },
-    generator: 'v0.dev'
-}
+  generator: "v0.dev",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <Toaster position="top-right" />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           {children}
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }

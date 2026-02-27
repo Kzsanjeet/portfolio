@@ -1,33 +1,66 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Mail, Phone, MapPin, Send } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState } from "react";
+import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import toast from "react-hot-toast";
 
 export function Contact() {
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
-  })
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/contact",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      },
+    );
     // Handle form submission here
-    console.log("Form submitted:", formData)
-  }
+    if (response.ok) {
+      console.log("Form submitted successfully:", formData);
+      toast.success("Form submitted successfully!");
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
+      setLoading(false);
+    } else {
+      console.error("Form submission failed:", response.statusText);
+      setLoading(false);
+    }
+  };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   return (
     <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/30">
@@ -35,7 +68,8 @@ export function Contact() {
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">Get In Touch</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Ready to start your next project? Let's discuss how we can work together
+            Ready to start your next project? Let's discuss how we can work
+            together
           </p>
         </div>
 
@@ -44,8 +78,9 @@ export function Contact() {
             <div>
               <h3 className="text-2xl font-semibold mb-6">Let's Connect</h3>
               <p className="text-muted-foreground mb-8 leading-relaxed">
-                I'm always interested in hearing about new opportunities and exciting projects. Whether you have a
-                question or just want to talk, feel free to reach out!
+                I'm always interested in hearing about new opportunities and
+                exciting projects. Whether you have a question or just want to
+                talk, feel free to reach out!
               </p>
             </div>
 
@@ -56,7 +91,9 @@ export function Contact() {
                 </div>
                 <div>
                   <p className="font-medium">Email</p>
-                  <p className="text-muted-foreground">sanjeetkazithapa@gmail.com</p>
+                  <p className="text-muted-foreground">
+                    sanjeetkazithapa@gmail.com
+                  </p>
                 </div>
               </div>
 
@@ -85,7 +122,10 @@ export function Contact() {
           <Card>
             <CardHeader>
               <CardTitle>Send a Message</CardTitle>
-              <CardDescription>Fill out the form below and I'll get back to you as soon as possible.</CardDescription>
+              <CardDescription>
+                Fill out the form below and I'll get back to you as soon as
+                possible.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -119,9 +159,9 @@ export function Contact() {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={loading}>
                   <Send className="mr-2 h-4 w-4" />
-                  Send Message
+                  {loading ? "Sending..." : "Send Message"}
                 </Button>
               </form>
             </CardContent>
@@ -129,5 +169,5 @@ export function Contact() {
         </div>
       </div>
     </section>
-  )
+  );
 }
